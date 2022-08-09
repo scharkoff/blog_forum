@@ -1,6 +1,7 @@
 // -- Плагины
 import express from "express";
 import mongoose from "mongoose";
+import multer from "multer";
 
 // -- Валидации
 import {registerValidation, loginValidation, postCreateValidation} from "./validations/validations.js";
@@ -18,8 +19,31 @@ mongoose
 .then(() => {console.log("Successful connection to the database")})
 .catch((err) => {console.log(err, "Connect error")})
 
+// -- Express app
 const app = express();
 app.use(express.json());
+
+// -- Multer storage
+const storage = multer.diskStorage({
+    destination: (__, _, cb) => {
+        cb(null, "uploads");
+    },
+    filename: (_, file, cb) => {
+        cb(null, file.originalname);
+    }
+});
+
+const upload = multer({ storage });
+
+// -- Загрузить файл картинку
+app.post("/upload", checkAuth, upload.single("image"), (req, res) => {
+    return res.json({
+        url: `/uploads/${req.file.originalname}`,
+    });
+});
+
+// -- Доступ к картинке
+app.use("/uploads", express.static("uploads")); // -- GET запрос на получение статичного файла по его названию (с расширением)
 
 // -- Авторизация пользователей
 app.post("/auth/login", loginValidation, login);
