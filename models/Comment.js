@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
 
-const PostSchema = new mongoose.Schema(
+const CommentSchema = new mongoose.Schema(
   {
-    title: {
+    fullName: {
       type: String,
       required: true,
     },
@@ -10,29 +10,20 @@ const PostSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    tags: {
-      type: Array,
-      default: [],
+    postId: {
+      type: String,
+      required: true,
     },
-
-    imageUrl: String,
-
-    viewsCount: {
-      type: Number,
-      default: 0,
-    },
-
-    commentsCount: {
-      type: Number,
-      default: 0,
-    },
-
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
     },
+    avatarUrl: {
+      type: String,
+    },
   },
+
   {
     timestamps: true,
   },
@@ -44,4 +35,4 @@ const PostSchema = new mongoose.Schema(
   }
 );
 
-export default mongoose.model("Post", PostSchema);
+export default mongoose.model("Comment", CommentSchema);
