@@ -1,4 +1,5 @@
 import PostModel from "../models/Post.js";
+import CommentModel from "../models/Comment.js";
 
 // -- Получить все статьи
 export const getAll = async (req, res) => {
@@ -20,6 +21,7 @@ export const getLastTags = async (req, res) => {
     const posts = await PostModel.find().limit(5).exec();
 
     const tags = posts
+      .reverse()
       .map((obj) => obj.tags)
       .flat()
       .slice(0, 5);
@@ -34,9 +36,10 @@ export const getLastTags = async (req, res) => {
 };
 
 // -- Получить одну статью
-export const getOne = (req, res) => {
+export const getOne = async (req, res) => {
   try {
     const postId = req.params.id;
+    const comments = await CommentModel.find({ postId });
 
     PostModel.findOneAndUpdate(
       {
@@ -44,6 +47,7 @@ export const getOne = (req, res) => {
       },
       {
         $inc: { viewsCount: 1 },
+        commentsCount: comments.length,
       },
       {
         returnDocument: "after",
