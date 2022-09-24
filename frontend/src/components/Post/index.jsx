@@ -1,21 +1,28 @@
 import React from "react";
+
+// -- clsx for css
 import clsx from "clsx";
+
+// -- Styles
+import styles from "./Post.module.scss";
+
+// -- Material UI
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Clear";
 import EditIcon from "@mui/icons-material/Edit";
 import EyeIcon from "@mui/icons-material/RemoveRedEyeOutlined";
 import CommentIcon from "@mui/icons-material/ChatBubbleOutlineOutlined";
-import { Link } from "react-router-dom";
 
-import styles from "./Post.module.scss";
+// React-redux
+import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+
+// -- Components
 import { UserInfo } from "../UserInfo";
-import { useDispatch, useSelector } from "react-redux";
 import { PostSkeleton } from "./Skeleton";
-import {
-  fetchPosts,
-  fetchRemovePost,
-  fetchTags,
-} from "../../redux/slices/posts";
+
+// -- Redux state
+import { fetchRemovePost } from "../../redux/slices/posts";
 
 export const Post = ({
   id,
@@ -31,12 +38,15 @@ export const Post = ({
   isLoading,
   isEditable,
 }) => {
+  // -- Redux dispatch
   const dispatch = useDispatch();
 
+  // -- Скелет при загрузке страницы
   if (isLoading) {
     return <PostSkeleton />;
   }
 
+  // -- Обработка клика по кнопке "Удалить статью"
   const onClickRemove = () => {
     if (window.confirm("Вы действительно хотите удалить статью?")) {
       dispatch(fetchRemovePost(id));

@@ -5,7 +5,7 @@ import PostModel from "../models/Post.js";
 // -- Получить все комментарии статьи
 export const getAllComments = async (req, res) => {
   try {
-    const comments = await CommentModel.find();
+    const comments = await CommentModel.find().populate("user").exec();
 
     return res.json(comments);
   } catch (error) {

@@ -23,10 +23,11 @@ export const getLastTags = async (req, res) => {
     const tags = posts
       .reverse()
       .map((obj) => obj.tags)
-      .flat()
-      .slice(0, 5);
+      .flat();
 
-    return res.json(tags);
+    const fiveTags = [...new Set(tags)].slice(0, 5);
+
+    return res.json(fiveTags);
   } catch (error) {
     console.log(error);
     return res.status(500).json({

@@ -1,29 +1,51 @@
 import React from "react";
+
+// -- Material UI
 import TextField from "@mui/material/TextField";
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
+
+// -- Material UI simple editor
 import SimpleMDE from "react-simplemde-editor";
 
+// -- Styles
 import "easymde/dist/easymde.min.css";
 import styles from "./AddPost.module.scss";
+
+// -- React-redux
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
+
+// -- Redux state
 import { selectIsAuth } from "../../redux/slices/auth";
+
+// -- Axios
 import axios from "../../axios";
 
 export const AddPost = () => {
+  // -- Проверка на авторизацию
   const isAuth = useSelector(selectIsAuth);
+
+  // -- Навигация rrd
   const navigate = useNavigate();
+
+  // -- id поста
   const { id } = useParams();
 
+  // -- useState
   const [text, setText] = React.useState("");
   const [isLoading, setLoading] = React.useState(false);
   const [imageUrl, setImageUrl] = React.useState("");
   const [tags, setTags] = React.useState("");
   const [title, setTitle] = React.useState("");
+
+  // -- useRef
   const inputFileRef = React.useRef(null);
+
+  // -- Проверка на режим редактирования
   const isEditing = Boolean(id);
 
+  // -- Загрузка изображения к посту
   const handleChangeFile = async (event) => {
     try {
       const formData = new FormData();
@@ -37,6 +59,7 @@ export const AddPost = () => {
     }
   };
 
+  // -- useEffect
   React.useEffect(() => {
     if (id) {
       axios
@@ -54,10 +77,13 @@ export const AddPost = () => {
     }
   }, []);
 
+  // -- Functions
+  // -- Обработка клика по кнопке "Удалить" картинку
   const onClickRemoveImage = () => {
     setImageUrl("");
   };
 
+  // -- Обработка клика по кнопке "Опубликовать" пост
   const onSubmit = async () => {
     try {
       setLoading(true);
@@ -82,10 +108,12 @@ export const AddPost = () => {
     }
   };
 
+  // -- useCallback for simple editor
   const onChange = React.useCallback((value) => {
     setText(value);
   }, []);
 
+  // -- Опции для simple editor
   const options = React.useMemo(
     () => ({
       spellChecker: false,

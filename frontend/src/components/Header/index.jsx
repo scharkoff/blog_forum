@@ -1,24 +1,32 @@
 import React from "react";
+
+// -- Material UI
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-
-import styles from "./Header.module.scss";
 import Container from "@mui/material/Container";
+
+// -- Styles
+import styles from "./Header.module.scss";
+
+// -- React-Redux
 import { Link } from "react-router-dom";
-import { logout, selectIsAuth } from "../../redux/slices/auth";
 import { useSelector, useDispatch } from "react-redux";
-import { Navigate } from "react-router-dom";
-import {
-  fetchActiveTag,
-  fetchPosts,
-  fetchTags,
-} from "../../redux/slices/posts";
+
+// -- Redux state
+import { fetchActiveTag, fetchPosts } from "../../redux/slices/posts";
+import { logout, selectIsAuth } from "../../redux/slices/auth";
 
 export const Header = () => {
-  const isAuth = useSelector(selectIsAuth);
+  // -- Redux dispatch
   const dispatch = useDispatch();
+
+  // -- Проверка на авторизацию
+  const isAuth = useSelector(selectIsAuth);
+
+  // -- User data
   const user = useSelector((state) => state.auth.data);
 
+  // -- Обработка клика по кнопке "Выйти"
   const onClickLogout = () => {
     if (window.confirm("Вы действительно хотите выйти из акккаунта?")) {
       dispatch(logout());
@@ -33,7 +41,7 @@ export const Header = () => {
           <Link
             onClick={() => {
               dispatch(fetchPosts());
-              dispatch(fetchTags());
+              dispatch(fetchActiveTag(null));
             }}
             className={styles.logo}
             to="/"
@@ -43,7 +51,7 @@ export const Header = () => {
           <div className={styles.buttons}>
             {isAuth ? (
               <>
-                <Link to={`/profile/${user._id}`}>
+                <Link to={`/profile/${user?._id}`}>
                   <Typography
                     style={{
                       cursor: "pointer",
@@ -52,19 +60,21 @@ export const Header = () => {
                     }}
                     variant="h7"
                   >
-                    Привет, {user.fullName}!
+                    {user?.fullName}
                   </Typography>
                 </Link>
                 <Link to="/add-post">
                   <Button variant="contained">Написать статью</Button>
                 </Link>
-                <Button
-                  onClick={onClickLogout}
-                  variant="contained"
-                  color="error"
-                >
-                  Выйти
-                </Button>
+                <Link to="/login">
+                  <Button
+                    onClick={onClickLogout}
+                    variant="contained"
+                    color="error"
+                  >
+                    Выйти
+                  </Button>
+                </Link>
               </>
             ) : (
               <>

@@ -1,5 +1,9 @@
 import React from "react";
+
+// -- Styles
 import styles from "./SideBlock.module.scss";
+
+// -- Material UI
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 

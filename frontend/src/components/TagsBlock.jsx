@@ -9,13 +9,15 @@ import TagIcon from "@mui/icons-material/Tag";
 import ListItemText from "@mui/material/ListItemText";
 import Skeleton from "@mui/material/Skeleton";
 
-// -- Libs
+// -- React-redux
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
-// -- Компоненты
+// -- Components
 import { SideBlock } from "./SideBlock";
+
+// -- Redux state
 import { fetchActiveTag, fetchPostsLikeTag } from "../redux/slices/posts";
 
 export const TagsBlock = ({ items, isLoading = true }) => {
@@ -27,6 +29,10 @@ export const TagsBlock = ({ items, isLoading = true }) => {
   React.useEffect(() => {
     setActiveTagName(name);
   }, []);
+
+  React.useEffect(() => {
+    if (!name) setActiveTagName(null);
+  }, [activeTag]);
 
   const onGetPosts = (name) => {
     dispatch(fetchActiveTag(name));

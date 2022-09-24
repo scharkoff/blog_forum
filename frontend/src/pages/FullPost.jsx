@@ -1,12 +1,21 @@
 import React from "react";
 
+// -- Components
 import { Post } from "../components/Post";
 import { Index } from "../components/AddComment";
 import { CommentsBlock } from "../components/CommentsBlock";
-import { useParams } from "react-router-dom";
-import axios from "../axios";
+
+// -- React markdown
 import ReactMarkdown from "react-markdown";
+
+// -- React-redux
+import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+
+// -- Axios
+import axios from "../axios";
+
+// -- Redux state
 import { fetchComments } from "../redux/slices/comments";
 
 export const FullPost = () => {
@@ -62,9 +71,9 @@ export const FullPost = () => {
                 .map((item) => {
                   return {
                     user: {
-                      userId: item.user,
-                      fullName: item.fullName,
-                      avatarUrl: item.avatarUrl,
+                      userId: item.user?._id,
+                      fullName: item.user?.fullName,
+                      avatarUrl: item.user?.avatarUrl,
                     },
                     text: item.text,
                     commentId: item._id,

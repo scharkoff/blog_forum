@@ -11,10 +11,22 @@ import {
   registerValidation,
   loginValidation,
   postCreateValidation,
+  fullNameValidation,
+  passwordValidation,
+  emailValidation,
+  avatarValidation,
 } from "./validations/validations.js";
 
 // -- Контроллеры
-import { register, login, getMe } from "./controllers/UserController.js";
+import {
+  register,
+  login,
+  getMe,
+  updateUserLogin,
+  updateUserEmail,
+  updateUserPassword,
+  updateUserAvatar,
+} from "./controllers/UserController.js";
 import {
   create,
   getAll,
@@ -84,6 +96,43 @@ app.post(
   registerValidation,
   handleValidationErrors,
   register
+);
+
+// -- === Обновить информацию пользователя ===
+// -- Обновить логин пользователя
+app.patch(
+  "/auth/updateUserLogin",
+  checkAuth,
+  fullNameValidation,
+  handleValidationErrors,
+  updateUserLogin
+);
+
+// -- Обновить почту пользователя
+app.patch(
+  "/auth/updateUserEmail",
+  checkAuth,
+  emailValidation,
+  handleValidationErrors,
+  updateUserEmail
+);
+
+// -- Обновить пароль пользователя
+app.patch(
+  "/auth/updateUserPassword",
+  checkAuth,
+  passwordValidation,
+  handleValidationErrors,
+  updateUserPassword
+);
+
+// -- Обновить аватар пользователя
+app.patch(
+  "/auth/updateUserAvatar",
+  checkAuth,
+  avatarValidation,
+  handleValidationErrors,
+  updateUserAvatar
 );
 
 // -- Получить информацию о профиле

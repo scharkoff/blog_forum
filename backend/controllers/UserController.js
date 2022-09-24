@@ -23,6 +23,13 @@ export const register = async (req, res) => {
       passwordHash: phash,
     });
 
+    const checkNewUserData = await UserModel.findOne({ email: req.body.email });
+    if (checkNewUserData) {
+      return res.status(400).json({
+        message: "Данный аккаунт уже зарегистрирован!",
+      });
+    }
+
     const user = await doc.save();
 
     const token = jwt.sign(
@@ -112,6 +119,122 @@ export const getMe = async (req, res) => {
     const { passwordHash, ...userData } = user._doc;
 
     return res.json(userData);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "Что-то пошло не так!",
+      error,
+    });
+  }
+};
+
+// -- Изменить логин пользователя
+export const updateUserLogin = async (req, res) => {
+  try {
+    const user = await UserModel.findByIdAndUpdate(req.body.id, {
+      fullName: req.body.fullName,
+    });
+
+    if (!user) {
+      return res.status(404).json({
+        message: "Пользователь не найден!",
+      });
+    }
+
+    const { ...userData } = user._doc;
+
+    return res.json({
+      userData,
+      success: true,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "Что-то пошло не так!",
+      error,
+    });
+  }
+};
+
+// -- Изменить пароль пользователя
+export const updateUserPassword = async (req, res) => {
+  try {
+    const password = req.body.password;
+    const salt = await bcrypt.genSalt(10);
+    const phash = await bcrypt.hash(password, salt);
+
+    const user = await UserModel.findByIdAndUpdate(req.body.id, {
+      passwordHash: phash,
+    });
+
+    if (!user) {
+      return res.status(404).json({
+        message: "Пользователь не найден!",
+      });
+    }
+
+    const { passwordHash, ...userData } = user._doc;
+
+    return res.json({
+      userData,
+      success: true,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "Что-то пошло не так!",
+      error,
+    });
+  }
+};
+
+// -- Изменить почту пользователя
+export const updateUserEmail = async (req, res) => {
+  try {
+    const user = await UserModel.findByIdAndUpdate(req.body.id, {
+      email: req.body.email,
+    });
+
+    if (!user) {
+      return res.status(404).json({
+        message: "Пользователь не найден!",
+      });
+    }
+
+    const { ...userData } = user._doc;
+
+    return res.json({
+      userData,
+      success: true,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "Что-то пошло не так!",
+      error,
+    });
+  }
+};
+
+// -- Изменить аватар пользователя
+export const updateUserAvatar = async (req, res) => {
+  try {
+    const user = await UserModel.findByIdAndUpdate(req.body.id, {
+      avatarUrl: req.body.avatarUrl,
+    });
+
+    if (!user) {
+      return res.status(404).json({
+        message: "Пользователь не найден!",
+      });
+    }
+
+    const { ...userData } = user._doc;
+
+    return res.json({
+      userData,
+      success: true,
+    });
   } catch (error) {
     console.log(error);
     return res.status(500).json({

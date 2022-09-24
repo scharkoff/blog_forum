@@ -1,40 +1,60 @@
 import React from "react";
 
+// -- Styles
 import styles from "./AddComment.module.scss";
 
+// -- Material UI
 import TextField from "@mui/material/TextField";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
+
+// -- React-redux
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
-import axios from "../../axios";
+// -- Redux state
 import {
   fetchCancelEditMode,
   fetchComments,
 } from "../../redux/slices/comments";
 
+// -- Axios
+import axios from "../../axios";
+
 export const Index = () => {
-  const [user, setUser] = React.useState(null);
-  const { id } = useParams();
+  // -- Redux dispatch
   const dispatch = useDispatch();
+
+  // -- useState
+  const [user, setUser] = React.useState(null);
+  const [text, setText] = React.useState("");
+
+  // -- useParams
+  const { id } = useParams();
+
+  // -- useSelector
   const { editMode } = useSelector((state) => state.posts.comments);
   let { editbleComment } = useSelector((state) => state.posts.comments);
-  const [text, setText] = React.useState("");
+  // -- User data
   const { data } = useSelector((state) => state.auth);
 
+  // -- useEffect
+  // -- Проверка на авторизацию
   React.useEffect(() => {
     axios.get("/auth/me").then((res) => {
       setUser(res.data);
     });
   }, []);
 
+  // -- Установка текста для редактирования существующего комментария
   React.useEffect(() => {
     if (editbleComment) {
       setText(editbleComment.text);
     }
   }, [editbleComment]);
 
+  // -- Functions
+  // -- Обработка клика по кнопке "Отправить" и "Сохранить"
   const onSubmit = async () => {
     try {
       const fields = {
@@ -55,6 +75,7 @@ export const Index = () => {
     }
   };
 
+  // -- Обработка клика по кнопке "Отменить"
   const onCancel = async () => {
     dispatch(fetchCancelEditMode());
     setText("");
@@ -65,7 +86,7 @@ export const Index = () => {
       <div className={styles.root}>
         <Avatar
           classes={{ root: styles.avatar }}
-          src={user ? user.avatarUrl : ""}
+          src={user ? `http://localhost:4444${user.avatarUrl}` : ""}
         />
         <div className={styles.form}>
           <TextField

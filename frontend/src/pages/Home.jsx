@@ -1,56 +1,76 @@
 import React from "react";
 
-// -- Material UI imports
+// -- Material UI
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Grid from "@mui/material/Grid";
 
-// -- Компоненты
+// -- Components
 import { Post } from "../components/Post";
 import { TagsBlock } from "../components/TagsBlock";
 import { CommentsBlock } from "../components/CommentsBlock";
-import { useDispatch, useSelector } from "react-redux";
 
-// -- Slices
+// -- React-redux
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+
+// -- Redux state
+import store from "../redux/store";
 import {
   fetchPosts,
   fetchTags,
   fetchSortedPosts,
   fetchSortedPostsLikeTag,
 } from "../redux/slices/posts";
-
 import { fetchComments } from "../redux/slices/comments";
-
-// -- Libs
-import { useParams } from "react-router-dom";
-import store from "../redux/store";
+import { fetchAuthMe } from "../redux/slices/auth";
 
 export const Home = () => {
-  // -- redux
+  // -- Redux dispatch
   const dispatch = useDispatch();
+
+  // -- Redux state
   const state = store.getState();
 
+  // -- Комментарии и посты в стейте
   const { comments, posts } = state.posts;
+
+  // -- Отсорированные комментарии
   const sortedComments = [].concat(comments.items);
+
+  // -- Посты
   let postsArray = [].concat(posts.items);
 
+  // -- Теги
   let { tags } = useSelector((state) => state.posts);
+
+  // -- User data
   const userData = useSelector((state) => state.auth.data);
+
+  // -- На главной ли странице
   const isHomePage = useSelector((state) => state.posts.posts.home);
 
+  // -- Актуальный тег
   const { name } = useParams();
+
+  // -- useState
   const [activeTab, setActiveTab] = React.useState(0);
 
+  // -- Загружаются ли посты
   const isPostsLoading = posts.status === "loading";
 
+  // -- useEffect
   React.useEffect(() => {
     name
       ? dispatch(fetchSortedPostsLikeTag({ activeTab, name }))
       : dispatch(fetchPosts());
     dispatch(fetchTags());
     dispatch(fetchComments());
+    dispatch(fetchAuthMe());
   }, []);
 
+  // -- Functions
+  // -- Обработка клика по выбранному тегу
   const onSortPosts = (value) => {
     value === 1 ? setActiveTab(1) : setActiveTab(0);
     if (name) {
@@ -86,7 +106,7 @@ export const Home = () => {
                 viewsCount={obj.viewsCount}
                 commentsCount={obj.commentsCount}
                 tags={obj.tags}
-                isEditable={userData?._id === obj.user._id}
+                isEditable={userData?._id === obj?.user?._id}
               />
             )
           )}
@@ -106,8 +126,8 @@ export const Home = () => {
                     .map((item) => {
                       return {
                         user: {
-                          fullName: item.fullName,
-                          avatarUrl: item.avatarUrl,
+                          fullName: item.user?.fullName,
+                          avatarUrl: item.user?.avatarUrl,
                         },
                         text: item.text,
                         commentId: item._id,

@@ -1,6 +1,9 @@
 import React from "react";
 
+// -- Components
 import { SideBlock } from "./SideBlock";
+
+// -- Material UI
 import ListItem from "@mui/material/ListItem";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Avatar from "@mui/material/Avatar";
@@ -12,9 +15,12 @@ import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Clear";
 import EditIcon from "@mui/icons-material/Edit";
 
+// -- React-redux
 import { useDispatch, useSelector } from "react-redux";
-import { selectIsAuth } from "../redux/slices/auth.js";
 import { useParams } from "react-router-dom";
+
+// -- Redux state
+import { selectIsAuth } from "../redux/slices/auth.js";
 import { fetchEditComment, fetchRemoveComment } from "../redux/slices/comments";
 
 export const CommentsBlock = ({
@@ -23,19 +29,29 @@ export const CommentsBlock = ({
   isLoading = true,
   isEditble,
 }) => {
-  const isAuth = useSelector(selectIsAuth);
+  // -- Redux dispatch
   const dispatch = useDispatch();
+
+  // -- Проверка на авторизацию
+  const isAuth = useSelector(selectIsAuth);
+
+  // -- useParams
   const id = useParams();
+
+  // -- userId
   const userId = useSelector((state) =>
     state.auth.data ? state.auth.data._id : null
   );
 
+  // -- Functions
+  // -- Обработка клика по кнопке "Удалить" комментарий
   function onRemoveComment(commentId) {
     if (window.confirm("Вы действительно хотите удалить комментарий?")) {
       dispatch(fetchRemoveComment({ commentId, id }));
     }
   }
 
+  // -- Обрабокта клика по кнопке "Сохранить" комментарий
   function onEditComment(commentId, text) {
     dispatch(fetchEditComment({ id, commentId, text }));
   }
@@ -50,7 +66,10 @@ export const CommentsBlock = ({
                 {isLoading ? (
                   <Skeleton variant="circular" width={40} height={40} />
                 ) : (
-                  <Avatar alt={obj.user.fullName} src={obj.user.avatarUrl} />
+                  <Avatar
+                    alt={obj.user.fullName}
+                    src={`http://localhost:4444${obj.user.avatarUrl}`}
+                  />
                 )}
               </ListItemAvatar>
               {isLoading ? (
