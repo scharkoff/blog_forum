@@ -1,11 +1,13 @@
-import { compareSync } from "bcrypt";
 import CommentModel from "../models/Comment.js";
 import PostModel from "../models/Post.js";
 
 // -- Получить все комментарии статьи
 export const getAllComments = async (req, res) => {
   try {
-    const comments = await CommentModel.find().populate("user").exec();
+    const comments = await CommentModel.find()
+      .populate("user")
+      .populate("post")
+      .exec();
 
     return res.json(comments);
   } catch (error) {
@@ -22,25 +24,19 @@ export const addComment = async (req, res) => {
     const docComment = new CommentModel({
       text: req.body.text,
       user: req.userId,
-      postId: req.body.postId,
       avatarUrl: req.body.avatarUrl,
       fullName: req.body.fullName,
+      post: req.body.post,
     });
 
     PostModel.findByIdAndUpdate(
-      req.body.postId,
+      req.body.post,
       { $inc: { commentsCount: 1 } },
       (err, doc) => {
         if (err) {
           console.log(error);
           return res.status(500).json({
             message: "Не удалось создать комментарий!",
-          });
-        }
-
-        if (!doc) {
-          return res.status(404).json({
-            message: "Комментарий не найден!",
           });
         }
       }
@@ -62,7 +58,7 @@ export const removeComment = async (req, res) => {
     const commentId = req.body.commentId;
 
     PostModel.findByIdAndUpdate(
-      req.body.postId,
+      req.body.post,
       { $inc: { commentsCount: -1 } },
       (err, doc) => {
         if (err) {

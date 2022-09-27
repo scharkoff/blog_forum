@@ -48,14 +48,23 @@ export const TagsBlock = ({ items, isLoading = true }) => {
             key={i}
             style={{
               textDecoration: "none",
-              color: activeTagName === name ? "blue" : "black",
+              color: activeTagName === name ? "white" : "black",
             }}
             to={`/tags/${name}`}
           >
-            <ListItem key={i} onClick={() => onGetPosts(name)} disablePadding>
+            <ListItem
+              style={{
+                backgroundColor: activeTagName === name ? "#4361ee" : "white",
+              }}
+              key={i}
+              onClick={() => onGetPosts(name)}
+              disablePadding
+            >
               <ListItemButton>
                 <ListItemIcon>
-                  <TagIcon />
+                  <TagIcon
+                    style={{ color: activeTagName === name ? "white" : "" }}
+                  />
                 </ListItemIcon>
                 {isLoading ? (
                   <Skeleton width={100} />

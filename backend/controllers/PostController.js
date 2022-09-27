@@ -1,5 +1,6 @@
 import PostModel from "../models/Post.js";
 import CommentModel from "../models/Comment.js";
+import mongoose from "mongoose";
 
 // -- Получить все статьи
 export const getAll = async (req, res) => {
@@ -23,7 +24,8 @@ export const getLastTags = async (req, res) => {
     const tags = posts
       .reverse()
       .map((obj) => obj.tags)
-      .flat();
+      .flat()
+      .filter((tag) => tag);
 
     const fiveTags = [...new Set(tags)].slice(0, 5);
 
@@ -40,7 +42,9 @@ export const getLastTags = async (req, res) => {
 export const getOne = async (req, res) => {
   try {
     const postId = req.params.id;
-    const comments = await CommentModel.find({ postId });
+    const comments = await CommentModel.find({
+      post: mongoose.Types.ObjectId(postId),
+    });
 
     PostModel.findOneAndUpdate(
       {
@@ -79,10 +83,18 @@ export const getOne = async (req, res) => {
 };
 
 // -- Удалить статью
-export const remove = (req, res) => {
+export const remove = async (req, res) => {
   try {
     const postId = req.params.id;
 
+    // -- Удалить все комментарии поста
+    await CommentModel.find({
+      post: mongoose.Types.ObjectId(postId),
+    })
+      .deleteMany()
+      .exec();
+
+    // -- Удалить сам пост
     PostModel.findOneAndDelete(
       {
         _id: postId,

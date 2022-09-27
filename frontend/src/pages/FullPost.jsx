@@ -51,11 +51,11 @@ export const FullPost = () => {
         title={data.title}
         imageUrl={data.imageUrl ? `http://localhost:4444${data.imageUrl}` : ""}
         user={data.user}
-        createdAt={data.createdAt}
+        createdAt={data.createdAt.slice(0, 10)}
         viewsCount={data.viewsCount}
         commentsCount={
           allComments
-            ? allComments.filter((item) => item.postId === id).length
+            ? allComments.filter((item) => item.post?._id === id).length
             : 0
         }
         tags={data.tags}
@@ -67,7 +67,7 @@ export const FullPost = () => {
         items={
           allComments
             ? allComments
-                .filter((item) => item.postId === id)
+                .filter((item) => item.post?._id === id)
                 .map((item) => {
                   return {
                     user: {

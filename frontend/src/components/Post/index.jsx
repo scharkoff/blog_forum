@@ -37,6 +37,7 @@ export const Post = ({
   isFullPost,
   isLoading,
   isEditable,
+  alert,
 }) => {
   // -- Redux dispatch
   const dispatch = useDispatch();
@@ -49,7 +50,16 @@ export const Post = ({
   // -- Обработка клика по кнопке "Удалить статью"
   const onClickRemove = () => {
     if (window.confirm("Вы действительно хотите удалить статью?")) {
-      dispatch(fetchRemovePost(id));
+      try {
+        dispatch(fetchRemovePost(id));
+        alert.setAlertText("Пост успешно удален!");
+        alert.setAlertType("success");
+        alert.setOpen(true);
+      } catch (error) {
+        alert.setAlertText("Произошла ошибка при удалении поста!");
+        alert.setAlertType("error");
+        alert.setOpen(true);
+      }
     }
   };
 

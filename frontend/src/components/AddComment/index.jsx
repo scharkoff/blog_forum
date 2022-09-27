@@ -61,8 +61,8 @@ export const Index = () => {
         commentId: editMode ? editbleComment.commentId : null,
         fullName: user.fullName,
         text,
-        postId: id,
         avatarUrl: user.avatarUrl,
+        post: id,
       };
       !editMode
         ? await axios.post(`/posts/${id}/addComment`, fields)

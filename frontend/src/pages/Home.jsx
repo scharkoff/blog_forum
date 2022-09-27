@@ -4,6 +4,9 @@ import React from "react";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Grid from "@mui/material/Grid";
+import Alert from "@mui/material/Alert";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
 
 // -- Components
 import { Post } from "../components/Post";
@@ -34,6 +37,11 @@ export const Home = () => {
 
   // -- Комментарии и посты в стейте
   const { comments, posts } = state.posts;
+
+  // -- Alert settings hooks
+  const [open, setOpen] = React.useState(false);
+  const [alertText, setAlertText] = React.useState("");
+  const [alertType, setAlertType] = React.useState("info");
 
   // -- Отсорированные комментарии
   const sortedComments = [].concat(comments.items);
@@ -80,6 +88,24 @@ export const Home = () => {
 
   return (
     <>
+      <Alert
+        style={{ display: !open ? "none" : "flex", marginBottom: 20 }}
+        severity={alertType}
+        action={
+          <IconButton
+            aria-label="close"
+            color="inherit"
+            size="small"
+            onClick={() => {
+              setOpen(false);
+            }}
+          >
+            <CloseIcon fontSize="inherit" />
+          </IconButton>
+        }
+      >
+        {alertText}
+      </Alert>
       <Tabs
         style={{ marginBottom: 15 }}
         value={activeTab}
@@ -107,6 +133,7 @@ export const Home = () => {
                 commentsCount={obj.commentsCount}
                 tags={obj.tags}
                 isEditable={userData?._id === obj?.user?._id}
+                alert={{ setAlertText, setAlertType, setOpen }}
               />
             )
           )}
@@ -121,8 +148,8 @@ export const Home = () => {
             items={
               comments.items
                 ? sortedComments
-                    .slice(0, 5)
                     .reverse()
+                    .slice(0, 5)
                     .map((item) => {
                       return {
                         user: {
