@@ -53,6 +53,11 @@ export const Index = () => {
     }
   }, [editbleComment]);
 
+  // -- Сбрасывать значение комментария в режиме редактирования при выходе со страницы
+  React.useEffect(() => {
+    setText("");
+  }, [id]);
+
   // -- Functions
   // -- Обработка клика по кнопке "Отправить" и "Сохранить"
   const onSubmit = async () => {

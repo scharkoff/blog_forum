@@ -36,7 +36,7 @@ export const fetchPostsLikeTag = createAsyncThunk(
 
     if (!name) return data;
 
-    return data.filter((post) => post.tags.includes(name));
+    return data.filter((post) => post.tags.includes(name)).reverse();
   }
 );
 
@@ -53,6 +53,7 @@ export const fetchSortedPostsLikeTag = createAsyncThunk(
   "posts/fetchPostsLikeTags",
   async ({ value, name }) => {
     const { data } = await axios.get("/posts");
+    console.log(value);
 
     if (value === 1) {
       return data

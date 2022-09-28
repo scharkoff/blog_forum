@@ -5,6 +5,11 @@ import { Post } from "../components/Post";
 import { Index } from "../components/AddComment";
 import { CommentsBlock } from "../components/CommentsBlock";
 
+// -- Material UI
+import Alert from "@mui/material/Alert";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
+
 // -- React markdown
 import ReactMarkdown from "react-markdown";
 
@@ -26,6 +31,11 @@ export const FullPost = () => {
 
   const dispatch = useDispatch();
 
+  // -- Alert settings hooks
+  const [open, setOpen] = React.useState(false);
+  const [alertText, setAlertText] = React.useState("");
+  const [alertType, setAlertType] = React.useState("info");
+
   React.useEffect(() => {
     dispatch(fetchComments());
   }, []);
@@ -37,7 +47,11 @@ export const FullPost = () => {
         setData(res.data);
         setLoading(false);
       })
-      .catch(() => alert("Ошибка при получении статьи!"));
+      .catch(() => {
+        setAlertText("Ошибка при получении статьи!");
+        setOpen(true);
+        setAlertType("error");
+      });
   }, []);
 
   if (isLoading) {
@@ -46,6 +60,24 @@ export const FullPost = () => {
 
   return (
     <>
+      <Alert
+        style={{ display: !open ? "none" : "flex", marginBottom: 20 }}
+        severity={alertType}
+        action={
+          <IconButton
+            aria-label="close"
+            color="inherit"
+            size="small"
+            onClick={() => {
+              setOpen(false);
+            }}
+          >
+            <CloseIcon fontSize="inherit" />
+          </IconButton>
+        }
+      >
+        {alertText}
+      </Alert>
       <Post
         id={data._id}
         title={data.title}
