@@ -22,7 +22,7 @@ import { UserInfo } from "../UserInfo";
 import { PostSkeleton } from "./Skeleton";
 
 // -- Redux state
-import { fetchRemovePost } from "../../redux/slices/posts";
+import { fetchPostsLikeTag, fetchRemovePost } from "../../redux/slices/posts";
 
 export const Post = ({
   id,
@@ -94,8 +94,8 @@ export const Post = ({
           </h2>
           <ul className={styles.tags}>
             {tags.map((name) => (
-              <li key={name}>
-                <Link to={`/tag/${name}`}>#{name}</Link>
+              <li key={name} onClick={() => dispatch(fetchPostsLikeTag(name))}>
+                <Link to={`/tags/${name}`}>#{name}</Link>
               </li>
             ))}
           </ul>
