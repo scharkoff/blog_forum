@@ -14,6 +14,10 @@ import Skeleton from "@mui/material/Skeleton";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Clear";
 import EditIcon from "@mui/icons-material/Edit";
+import Typography from "@mui/material/Typography";
+
+// -- Styles
+import styles from "./UserInfo/UserInfo.module.scss";
 
 // -- React-redux
 import { useDispatch, useSelector } from "react-redux";
@@ -61,8 +65,6 @@ export const CommentsBlock = ({
     dispatch(fetchEditComment({ id, commentId, text }));
   }
 
-  console.log("items: ", items);
-
   return (
     <SideBlock title="Комментарии">
       <List>
@@ -74,7 +76,7 @@ export const CommentsBlock = ({
                   <Skeleton variant="circular" width={40} height={40} />
                 ) : (
                   <Avatar
-                    alt={obj.user.fullName}
+                    alt={obj.user?.fullName}
                     src={`http://localhost:4444${obj.user.avatarUrl}`}
                   />
                 )}
@@ -87,10 +89,30 @@ export const CommentsBlock = ({
               ) : (
                 <>
                   <ListItemText
-                    primary={obj.user.fullName}
+                    primary={
+                      <React.Fragment>
+                        <Typography
+                          sx={{ display: "inline" }}
+                          component="span"
+                          variant="body2"
+                          color="text.primary"
+                        >
+                          {obj.user?.fullName}
+                        </Typography>
+                        <span
+                          className={
+                            obj.user?.rank === "user"
+                              ? styles.rank
+                              : styles.admin
+                          }
+                        >
+                          {" " + obj.user?.rank}
+                        </span>
+                      </React.Fragment>
+                    }
                     secondary={obj.text}
                   />
-                  {(isAuth && isEditble && userId === obj.user.userId) ||
+                  {(isAuth && isEditble && userId === obj.user?.userId) ||
                   (userRank === "admin" && isAuth && isEditble) ? (
                     <>
                       <IconButton

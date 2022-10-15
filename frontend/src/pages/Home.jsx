@@ -156,6 +156,7 @@ export const Home = () => {
                         user: {
                           fullName: item.user?.fullName,
                           avatarUrl: item.user?.avatarUrl,
+                          rank: item.user?.rank,
                         },
                         text: item.text,
                         commentId: item._id,

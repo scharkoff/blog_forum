@@ -1,16 +1,18 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "../../axios";
 
+// -- Получить всех пользователей
 export const fetchUsers = createAsyncThunk("users/fetchUsers", async () => {
   try {
-    const users = await axios.get("/users");
-    return users;
+    const { data } = await axios.get("/users");
+    return data;
   } catch (error) {
     console.log(error);
     return error;
   }
 });
 
+// -- Получить данные редактируемого пользователя
 export const fetchEditUserData = createAsyncThunk(
   "users/fetchEditUserData",
   async (data) => {
@@ -19,6 +21,7 @@ export const fetchEditUserData = createAsyncThunk(
   }
 );
 
+// -- Удаление пользователя
 export const fetchDeleteUser = createAsyncThunk(
   "users/fetchDeleteUser",
   async (id) => {
@@ -41,23 +44,31 @@ const usersSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: {
-    // -- Получение всех пользователей
+    // -- Получение данных редактируемого пользователя
+    [fetchEditUserData.pending]: (state, action) => {
+      state.editbleUserData = action.payload;
+      state.status = "loading";
+    },
+    [fetchEditUserData.rejected]: (state, action) => {
+      state.editbleUserData = [];
+      state.status = "error";
+    },
     [fetchEditUserData.fulfilled]: (state, action) => {
       state.editbleUserData = action.payload;
       state.status = "loaded";
     },
 
-    // -- Получить данные
-    [fetchUsers.pending]: (state) => {
-      state.data = null;
+    // -- Получить данные всех пользователей
+    [fetchUsers.pending]: (state, action) => {
+      state.data = action.payload;
       state.status = "loading";
     },
     [fetchUsers.rejected]: (state) => {
-      state.data = null;
+      state.data = [];
       state.status = "error";
     },
     [fetchUsers.fulfilled]: (state, action) => {
-      state.data = action.payload.data;
+      state.data = action.payload;
       state.status = "loaded";
     },
 

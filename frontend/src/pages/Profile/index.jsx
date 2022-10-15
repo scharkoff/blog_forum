@@ -249,9 +249,7 @@ export const Profile = () => {
               value={newAvatarUrl}
               variant="standard"
               style={{ width: 0, height: 0 }}
-              {...avatarForm.register("avatarUrl", {
-                required: "Загрузите аватар",
-              })}
+              {...avatarForm.register("avatarUrl", { required: true })}
             />
           </Grid>
 
