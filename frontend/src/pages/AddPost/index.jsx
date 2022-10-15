@@ -69,6 +69,7 @@ export const AddPost = () => {
 
   // -- useEffect
   React.useEffect(() => {
+    document.title = "Добавить пост";
     if (id) {
       axios
         .get(`/posts/${id}`)

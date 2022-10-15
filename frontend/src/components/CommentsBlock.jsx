@@ -38,9 +38,14 @@ export const CommentsBlock = ({
   // -- useParams
   const id = useParams();
 
-  // -- userId
+  // -- Auth userId
   const userId = useSelector((state) =>
     state.auth.data ? state.auth.data._id : null
+  );
+
+  // -- Auth user rank
+  const userRank = useSelector((state) =>
+    state.auth.data ? state.auth.data.rank : null
   );
 
   // -- Functions
@@ -55,6 +60,8 @@ export const CommentsBlock = ({
   function onEditComment(commentId, text) {
     dispatch(fetchEditComment({ id, commentId, text }));
   }
+
+  console.log("items: ", items);
 
   return (
     <SideBlock title="Комментарии">
@@ -83,7 +90,8 @@ export const CommentsBlock = ({
                     primary={obj.user.fullName}
                     secondary={obj.text}
                   />
-                  {isAuth && isEditble && userId === obj.user.userId ? (
+                  {(isAuth && isEditble && userId === obj.user.userId) ||
+                  (userRank === "admin" && isAuth && isEditble) ? (
                     <>
                       <IconButton
                         onClick={() => onRemoveComment(obj.commentId)}

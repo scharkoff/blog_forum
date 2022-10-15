@@ -1,11 +1,21 @@
 import React from "react";
+import Helmet from "react-helmet";
 
 // -- Material UI
 import Container from "@mui/material/Container";
 
 // -- Components
 import { Header } from "./components";
-import { Home, FullPost, Registration, AddPost, Login, Profile } from "./pages";
+import {
+  Home,
+  FullPost,
+  Registration,
+  AddPost,
+  Login,
+  Profile,
+  AdminPanel,
+  EditUserData,
+} from "./pages";
 
 // -- React-redux
 import { Route, Routes } from "react-router-dom";
@@ -36,6 +46,11 @@ function App() {
           <Route path="/add-post" element={<AddPost />}></Route>
           <Route path="/tags/:name" element={<Home />}></Route>
           <Route path="/profile/:id" element={<Profile />}></Route>
+          <Route path="/admin-panel" element={<AdminPanel />}></Route>
+          <Route
+            path="/admin-panel/edit-user/:id"
+            element={<EditUserData />}
+          ></Route>
         </Routes>
       </Container>
     </>

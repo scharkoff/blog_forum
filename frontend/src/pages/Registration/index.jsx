@@ -36,6 +36,7 @@ export const Registration = () => {
   // -- Настройки и работа с формой
   const { register, handleSubmit, setError, formState, getValues } = useForm({
     defaultValues: {
+      rank: "user",
       fullName: "",
       email: "",
       password: "",
@@ -57,6 +58,7 @@ export const Registration = () => {
   // -- Обработка клика по кнопке "Зарегистрироваться"
   const onSubmit = async (values) => {
     const data = await dispatch(fetchRegister(values));
+    console.log(values);
 
     if ("token" in data.payload) {
       window.localStorage.setItem("token", data.payload.token);
@@ -125,6 +127,7 @@ export const Registration = () => {
             error={Boolean(formState.errors.email?.message)}
           />
           <TextField
+            type="password"
             className={styles.field}
             label="Пароль"
             fullWidth

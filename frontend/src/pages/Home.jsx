@@ -69,6 +69,7 @@ export const Home = () => {
 
   // -- useEffect
   React.useEffect(() => {
+    document.title = "Главная страница";
     name
       ? dispatch(fetchSortedPostsLikeTag({ activeTab, name }))
       : dispatch(fetchPosts());

@@ -63,6 +63,16 @@ export const Header = () => {
                     {user?.fullName}
                   </Typography>
                 </Link>
+                {user.rank === "admin" ? (
+                  <Link to="/admin-panel">
+                    <Button variant="contained" color="secondary">
+                      Админ панель
+                    </Button>
+                  </Link>
+                ) : (
+                  ""
+                )}
+
                 <Link to="/add-post">
                   <Button variant="contained">Написать статью</Button>
                 </Link>

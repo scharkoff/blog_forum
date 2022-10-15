@@ -101,6 +101,7 @@ export const Login = () => {
             fullWidth
           />
           <TextField
+            type="password"
             className={styles.field}
             label="Пароль"
             error={Boolean(formState.errors.password?.message)}

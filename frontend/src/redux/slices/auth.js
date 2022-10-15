@@ -44,6 +44,19 @@ export const fetchUpdateUserLogin = createAsyncThunk(
   }
 );
 
+// -- Запрос на обновление логина пользователя
+export const fetchUpdateUserRank = createAsyncThunk(
+  "auth/fetchUpdateUserRank",
+  async (params) => {
+    try {
+      const { data } = await axios.patch("/auth/updateUserRank", params);
+      return data;
+    } catch (error) {
+      return { ...error.response.data, isError: true };
+    }
+  }
+);
+
 // -- Запрос на обновление почты пользователя
 export const fetchUpdateUserEmail = createAsyncThunk(
   "auth/updateUserEmail",

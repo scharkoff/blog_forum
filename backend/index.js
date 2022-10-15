@@ -26,6 +26,9 @@ import {
   updateUserEmail,
   updateUserPassword,
   updateUserAvatar,
+  getUsers,
+  deleteUser,
+  updateUserRank,
 } from "./controllers/UserController.js";
 import {
   create,
@@ -98,7 +101,7 @@ app.post(
   register
 );
 
-// -- === Обновить информацию пользователя ===
+// -- === CRUD для пользателей: обновить информацию пользователя ===
 // -- Обновить логин пользователя
 app.patch(
   "/auth/updateUserLogin",
@@ -135,10 +138,18 @@ app.patch(
   updateUserAvatar
 );
 
+// -- Обновить ранг пользователя
+app.patch(
+  "/auth/updateUserRank",
+  checkAuth,
+  handleValidationErrors,
+  updateUserRank
+);
+
 // -- Получить информацию о профиле
 app.get("/auth/me", checkAuth, getMe);
 
-// -- CRUD для комментариев
+// -- === CRUD для комментариев ===
 app.post(
   "/posts/:id/addComment",
   checkAuth,
@@ -161,7 +172,7 @@ app.patch(
   updateComment
 );
 
-// -- CRUD для постов
+// === -- CRUD для постов
 app.post(
   "/posts/create",
   checkAuth,
@@ -183,6 +194,11 @@ app.patch(
 
 app.get("/tags", getLastTags); // -- получить теги
 
+// === -- CRUD для пользователей
+app.get("/users", checkAuth, getUsers); // -- получить всех пользователей
+app.delete("/users/delete/:id", checkAuth, deleteUser); // -- удалить пользователя
+
+// -- Прослушка сервера
 app.listen(4444, (err) => {
   if (err) {
     return console.log(err);
