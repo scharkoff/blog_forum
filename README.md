@@ -1,5 +1,7 @@
 # Сайт-блог
 
+Деплой приложения на Vercel: https://blog-forum-frontend-alxqz6tnz-scharkoff.vercel.app/
+
 # Стек проекта
 
 -- Frontend:
